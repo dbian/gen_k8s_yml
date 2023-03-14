@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="gen_k8s_yml:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/gen_k8s_yml_jar</output-path>
+    <root id="archive" name="gen_k8s_yml.jar">
+      <element id="module-output" name="gen_k8s_yml" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/freemarker/freemarker/2.3.31/freemarker-2.3.31.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

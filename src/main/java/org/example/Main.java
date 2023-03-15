@@ -4,16 +4,12 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
+import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) {
         System.out.println("start working");
-        // 项目功能：生成k8s的yaml文件，工程包含多个Dockerfile功能，最终合并成一个yaml文件，允许提供过滤的功能
 
         String dir = args[0];
         String filters = args[1];
@@ -21,11 +17,19 @@ public class Main {
         String image_prefix = args[2];
         String freemaker_template_path = args[4];
         List<String> filter_list = Arrays.asList(filters.split(","));
-        // walk dir find directory contain Dockerfile
         getDirContainDockerfileRecursively(dir, filter_list).stream()
                 .map(dockerfileDir -> genYaml(dockerfileDir, tag_prefix, image_prefix, freemaker_template_path))
                 .reduce((a, b) -> a + b)
-                .ifPresent(System.out::println);
+                .ifPresent(x->{
+                    BufferedWriter out = null;
+                    try {
+                        out = new BufferedWriter(new FileWriter("deploy-all.yml"));
+                        out.write(x);
+                        out.close();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
     }
 
     private static String genYaml(File dockerfileDir, String tag_prefix,
